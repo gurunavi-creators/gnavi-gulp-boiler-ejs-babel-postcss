@@ -50,14 +50,14 @@
 
 # version
 
-- [version.jsonを参照](https://github.com/sekiyaeiji/gulp-boiler-ejs-babel-postcss/blob/master/version.json) 
+- [version.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/version.json) 
 
 
 # package
 
 ## package installed
 
-- [package.jsonを参照](https://github.com/sekiyaeiji/gulp-boiler-ejs-babel-postcss/blob/master/package.json) 
+- [package.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/package.json) 
 
 
 # config
