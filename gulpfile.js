@@ -341,11 +341,11 @@ gulp.task('babel', function () {
     .pipe(babel({
       filename: 'common-' + version.js.common + '.js',
       presets: [["es2015", {"loose": true}]],
-      compact: false,
-      minified: false,
+      compact: true,
+      minified: true,
       comments: false
     }))
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(gulp.dest(path.dist + 'js/'))
     .pipe(size({title:'size : js common'}));
 });
