@@ -37,18 +37,18 @@
 /*
  * init package
  */
-let gulp = require('gulp');
-var runSequence = require('run-sequence');
-let plumber = require('gulp-plumber');
-var notify = require('gulp-notify');
-var browserSync = require('browser-sync');
-let rename = require('gulp-rename');
-let size = require('gulp-size');
-let postcss = require('gulp-postcss');
-let moment = require('momentjs');
-//let timestump = moment().format('YYYYMMDDhhmmss');
-let timestump = '20161012113446';
-let version = require('./version.json');
+const gulp = require('gulp');
+const runSequence = require('run-sequence');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+const browserSync = require('browser-sync');
+const rename = require('gulp-rename');
+const size = require('gulp-size');
+const postcss = require('gulp-postcss');
+const moment = require('momentjs');
+//const timestump = moment().format('YYYYMMDDhhmmss');
+const timestump = '20161012113446';
+const version = require('./version.json');
 
 
 /*
@@ -167,7 +167,7 @@ const js_part = {
  * BrowserSync
  */
 gulp.task('serve', function () {
-  var syncOption = {
+  const syncOption = {
     port: 8051,
     ui: {
       port: 8052
@@ -198,7 +198,7 @@ gulp.task('watch', function () {
 /*
  * clean
  */
-let clean = require('del');
+const clean = require('del');
 gulp.task('clean', function () {
   console.log('---------- clean ----------');
   clean(path.tmp);
@@ -210,10 +210,10 @@ gulp.task('clean', function () {
 /*
  * sprite
  */
-let spritesmith = require('gulp.spritesmith');
+const spritesmith = require('gulp.spritesmith');
 gulp.task('sprite', function () {
   console.log('---------- sprite ----------');
-  let spriteData = gulp.src(path.sprite_src + 'sprite-icon/*.png')
+  const spriteData = gulp.src(path.sprite_src + 'sprite-icon/*.png')
   .pipe(spritesmith({
     imgName: 'sprite-icon.png',
     cssName: 'sprite-icon.css',
@@ -235,7 +235,7 @@ gulp.task('sprite', function () {
 /*
  * imageMin
  */
-let imagemin = require('gulp-imagemin');
+const imagemin = require('gulp-imagemin');
 gulp.task('imageMin', function() {
   console.log('---------- imageMin ----------');
   return gulp.src(path.img_src + '**/*')
@@ -251,7 +251,7 @@ gulp.task('imageMin', function() {
  * postcss
  */
 // precss(scss like)
-let precss = require('precss');
+const precss = require('precss');
 gulp.task('precss', function () {
   console.log('---------- css ----------');
   return gulp.src(path.css_src + '**/*.css')
@@ -275,8 +275,8 @@ gulp.task('renamecss', function () {
 });
 
 // postcss
-let autoprefixer = require('autoprefixer');
-let cssnano = require('cssnano');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
 gulp.task('postcss', function () {
   return gulp.src(path.tmp + 'css/*.css')
     .pipe(plumber({
@@ -301,7 +301,7 @@ gulp.task('postcss', function () {
 /*
  * kss styleguide
  */
-let kss = require('gulp-kss');
+const kss = require('gulp-kss');
 gulp.task('styleguide', function () {
   return gulp.src(path.tmp + 'css/common.css')
     .pipe(kss({
@@ -315,10 +315,10 @@ gulp.task('styleguide', function () {
  * js
  */
 // es2015
-let babel = require('gulp-babel');
-let concat = require('gulp-concat-util');
-let minify = require('gulp-babel-minify');
-let uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
+const concat = require('gulp-concat-util');
+const minify = require('gulp-babel-minify');
+const uglify = require('gulp-uglify');
 
 // babel
 gulp.task('babel', function () {
@@ -367,7 +367,7 @@ gulp.task('concat:lib', function () {
  * js test
  */
 // eslint
-let eslint = require('gulp-eslint');
+const eslint = require('gulp-eslint');
 gulp.task('eslint', function () {
   return gulp.src(path.tmp + 'js/common-' + version.js.common + '.js')
     .pipe(eslint())
@@ -380,8 +380,8 @@ gulp.task('eslint', function () {
  * html
  */
 // ejs
-let ejs = require('gulp-ejs');
-let minifyejs = require('gulp-minify-ejs');
+const ejs = require('gulp-ejs');
+const minifyejs = require('gulp-minify-ejs');
 gulp.task('ejs', function() {
   console.log('---------- html ----------');
   gulp.src(
