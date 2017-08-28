@@ -37,90 +37,91 @@
 /*
  * init package
  */
-const gulp = require('gulp');
-const runSequence = require('run-sequence');
-const plumber = require('gulp-plumber');
-const notify = require('gulp-notify');
-const browserSync = require('browser-sync');
-const rename = require('gulp-rename');
-const size = require('gulp-size');
-const postcss = require('gulp-postcss');
-const moment = require('momentjs');
-//const timestump = moment().format('YYYYMMDDhhmmss');
-const timestump = '20161012113446';
-const version = require('./version.json');
+import gulp from 'gulp'
+import runSequence from 'run-sequence'
+import plumber from 'gulp-plumber'
+import notify from 'gulp-notify'
+import browserSync from 'browser-sync'
+import rename from 'gulp-rename'
+import size from 'gulp-size'
+import postcss from 'gulp-postcss'
+import moment from 'momentjs'
+
+//const timestump = moment().format('YYYYMMDDhhmmss')
+const timestump = '20161012113446'
+const version = require('./version.json')
 
 
 /*
  * task manage
  */
 // build:css
-gulp.task('build:css', function () {
-  runSequence('precss', 'renamecss', 'postcss');
-});
+gulp.task('build:css', () => {
+  runSequence('precss', 'renamecss', 'postcss')
+})
 
 // build:js
-gulp.task('build:js', function () {
-  runSequence('babel', 'concat', 'test');
-});
+gulp.task('build:js', () => {
+  runSequence('babel', 'concat', 'test')
+})
 
 // build:js lib
-gulp.task('concat', function () {
-  runSequence('concat:lib');
-});
+gulp.task('concat', () => {
+  runSequence('concat:lib')
+})
 
 // build:html
-gulp.task('build:html', function () {
-  runSequence('ejs');
-});
+gulp.task('build:html', () => {
+  runSequence('ejs')
+})
 
 // build:copy
-gulp.task('build:copy', function () {
-  runSequence('copy');
-});
+gulp.task('build:copy', () => {
+  runSequence('copy')
+})
 
 // imagemin
-gulp.task('imagemin', function () {
-  runSequence('imageMin');
-});
+gulp.task('imagemin', () => {
+  runSequence('imageMin')
+})
 
 // test
-gulp.task('test', function () {
-  runSequence('eslint');
-});
+gulp.task('test', () => {
+  runSequence('eslint')
+})
 
 // build
-gulp.task('build', function () {
+gulp.task('build', () => {
   return runSequence(
     'build:css', 'build:js', 'build:html', 'build:copy'
-  );
-});
+  )
+})
 
 // default
-gulp.task('default', function () {
-  runSequence('build');
-});
+gulp.task('default', () => {
+  runSequence('build')
+})
 
 
 /*
  * option task
  */
 // start
-gulp.task('start', function () {
+gulp.task('start', () => {
   return runSequence(
     'build', 'watch', 'serve'
-  );
-});
+  )
+})
 
 // local
-gulp.task('local', function () {
-  runSequence('build');
-});
+gulp.task('local', () => {
+  runSequence('build')
+})
 
 // dev
-gulp.task('dev', function () {
-  runSequence('build');
-});
+gulp.task('dev', () => {
+  runSequence('build')
+})
 
 
 /*
@@ -136,7 +137,7 @@ const path = {
   js_src: 'src/js/',
   img_src: 'src/img/',
   sprite_src: 'src/sprite/'
-};
+}
 
 
 /*
@@ -145,7 +146,7 @@ const path = {
 const pathStat = {
   local: './',
   test_x: 'http://hoge/'
-};
+}
 
 
 /*
@@ -160,13 +161,13 @@ const js_part = {
     path.js_src + 'common/utility.js',
     path.js_src + 'common/sample_a.js'
   ]
-};
+}
 
 
 /*
  * BrowserSync
  */
-gulp.task('serve', function () {
+gulp.task('serve', () => {
   const syncOption = {
     port: 8051,
     ui: {
@@ -175,44 +176,44 @@ gulp.task('serve', function () {
     server: {
       baseDir: path.dist
     }
-  };
-  browserSync(syncOption);
-});
+  }
+  browserSync(syncOption)
+})
 
 
 /*
  * watch
  */
-gulp.task('watch', function () {
-  console.log('---------- watch ----------');
+gulp.task('watch', () => {
+  console.log('---------- watch ----------')
   return (function(){
-    gulp.watch(path.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload);
-    gulp.watch(path.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload);
-    gulp.watch(path.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload);
-    gulp.watch(path.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload);
-    gulp.watch('gulpfile.js', ['build']).on('change', browserSync.reload);
-  })();
-});
+    gulp.watch(path.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload)
+    gulp.watch(path.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload)
+    gulp.watch(path.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload)
+    gulp.watch(path.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload)
+    gulp.watch('gulpfile.js', ['build']).on('change', browserSync.reload)
+  })()
+})
 
 
 /*
  * clean
  */
-const clean = require('del');
-gulp.task('clean', function () {
-  console.log('---------- clean ----------');
-  clean(path.tmp);
-  clean(path.dist);
-  clean(path.tmp_dev);
-});
+import clean from 'del'
+gulp.task('clean', () => {
+  console.log('---------- clean ----------')
+  clean(path.tmp)
+  clean(path.dist)
+  clean(path.tmp_dev)
+})
 
 
 /*
  * sprite
  */
-const spritesmith = require('gulp.spritesmith');
-gulp.task('sprite', function () {
-  console.log('---------- sprite ----------');
+import spritesmith from 'gulp.spritesmith'
+gulp.task('sprite', () => {
+  console.log('---------- sprite ----------')
   const spriteData = gulp.src(path.sprite_src + 'sprite-icon/*.png')
   .pipe(spritesmith({
     imgName: 'sprite-icon.png',
@@ -222,38 +223,38 @@ gulp.task('sprite', function () {
     padding: 5,
     cssOpts: {
     cssSelector: function (sprite) {
-      return '.icon--' + sprite.name;
+      return '.icon--' + sprite.name
     }
   }
-  }));
-  spriteData.img.pipe(gulp.dest(path.img_src));
+  }))
+  spriteData.img.pipe(gulp.dest(path.img_src))
   spriteData.css.pipe(gulp.dest(path.css_src + 'common/module/'))
-    .pipe(size({title:'size : sprite'}));
-});
+    .pipe(size({title:'size : sprite'}))
+})
 
 
 /*
  * imageMin
  */
-const imagemin = require('gulp-imagemin');
-gulp.task('imageMin', function() {
-  console.log('---------- imageMin ----------');
+import imagemin from 'gulp-imagemin'
+gulp.task('imageMin', () => {
+  console.log('---------- imageMin ----------')
   return gulp.src(path.img_src + '**/*')
     .pipe(imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(path.img_src));
-});
+    .pipe(gulp.dest(path.img_src))
+})
 
 
 /*
  * postcss
  */
 // precss(scss like)
-const precss = require('precss');
-gulp.task('precss', function () {
-  console.log('---------- css ----------');
+import precss from 'precss'
+gulp.task('precss', () => {
+  console.log('---------- css ----------')
   return gulp.src(path.css_src + '**/*.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
@@ -261,23 +262,23 @@ gulp.task('precss', function () {
     .pipe(postcss([
         precss()
     ]))
-    .pipe(gulp.dest(path.tmp + 'css/'));
-});
+    .pipe(gulp.dest(path.tmp + 'css/'))
+})
 
 // rename
-gulp.task('renamecss', function () {
+gulp.task('renamecss', () => {
   return gulp.src(path.tmp + 'css/common/import.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(rename('common-' + version.css.common + '.css'))
-    .pipe(gulp.dest(path.tmp + 'css/'));
-});
+    .pipe(gulp.dest(path.tmp + 'css/'))
+})
 
 // postcss
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-gulp.task('postcss', function () {
+import autoprefixer from 'autoprefixer'
+import cssnano from 'cssnano'
+gulp.task('postcss', () => {
   return gulp.src(path.tmp + 'css/*.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
@@ -294,35 +295,35 @@ gulp.task('postcss', function () {
       })
     ]))
     .pipe(gulp.dest(path.dist + 'css/'))
-    .pipe(size({title:'size : css'}));
-});
+    .pipe(size({title:'size : css'}))
+})
 
 
 /*
  * kss styleguide
  */
-const kss = require('gulp-kss');
-gulp.task('styleguide', function () {
+import kss from 'gulp-kss'
+gulp.task('styleguide', () => {
   return gulp.src(path.tmp + 'css/common.css')
     .pipe(kss({
       overview: path.styleguide_src + 'styleguide.md'
     }))
-    .pipe(gulp.dest(path.dist + 'styleguide/'));
-});
+    .pipe(gulp.dest(path.dist + 'styleguide/'))
+})
 
 
 /*
  * js
  */
 // es2015
-const babel = require('gulp-babel');
-const concat = require('gulp-concat-util');
-const minify = require('gulp-babel-minify');
-const uglify = require('gulp-uglify');
+import babel from 'gulp-babel'
+import concat from 'gulp-concat-util'
+import minify from 'gulp-babel-minify'
+import uglify from 'gulp-uglify'
 
 // babel
-gulp.task('babel', function () {
-  console.log('---------- js ----------');
+gulp.task('babel', () => {
+  console.log('---------- js ----------')
   return gulp.src(js_part.common)
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
@@ -331,12 +332,12 @@ gulp.task('babel', function () {
     .pipe(gulp.dest(path.tmp + 'js/'))
     .pipe(concat.header([
       '(function(window, $){',
-      "  'use strict';",
+      "  'use strict'",
       ''
     ].join('\n')))
     .pipe(concat.footer([
       '',
-      '})(window, window.jQuery);'
+      '})(window, window.jQuery)'
     ].join('\n')))
     .pipe(babel({
       filename: 'common-' + version.js.common + '.js',
@@ -347,43 +348,43 @@ gulp.task('babel', function () {
     }))
     .pipe(uglify())
     .pipe(gulp.dest(path.dist + 'js/'))
-    .pipe(size({title:'size : js common'}));
-});
+    .pipe(size({title:'size : js common'}))
+})
 
 // concat
 // lib
-gulp.task('concat:lib', function () {
+gulp.task('concat:lib', () => {
   return gulp.src(js_part.lib)
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(concat('lib-' + version.js.lib + '.js'))
     .pipe(gulp.dest(path.dist + 'js/'))
-    .pipe(size({title:'size : js lib'}));
-});
+    .pipe(size({title:'size : js lib'}))
+})
 
 
 /*
  * js test
  */
 // eslint
-const eslint = require('gulp-eslint');
-gulp.task('eslint', function () {
+import eslint from 'gulp-eslint'
+gulp.task('eslint', () => {
   return gulp.src(path.tmp + 'js/common-' + version.js.common + '.js')
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
-});
+})
 
 
 /*
  * html
  */
 // ejs
-const ejs = require('gulp-ejs');
-const minifyejs = require('gulp-minify-ejs');
-gulp.task('ejs', function() {
-  console.log('---------- html ----------');
+import ejs from 'gulp-ejs'
+import minifyejs from 'gulp-minify-ejs'
+gulp.task('ejs', () => {
+  console.log('---------- html ----------')
   gulp.src(
       [
         path.html_src + 'html/**/*.ejs',
@@ -407,15 +408,15 @@ gulp.task('ejs', function() {
       {ext: '.html'}
     ))
     .pipe(gulp.dest(path.dist + '/'))
-    .pipe(size({title:'size : html'}));
-});
+    .pipe(size({title:'size : html'}))
+})
 
 
 /*
  * copy
  */
-gulp.task('copy', function () {
-  console.log('---------- copy ----------');
+gulp.task('copy', () => {
+  console.log('---------- copy ----------')
   return gulp.src(
     [
       path.img_src + '**/*'
@@ -425,7 +426,7 @@ gulp.task('copy', function () {
   .pipe(plumber({
     errorHandler: notify.onError('Error: <%= error.message %>')
   }))
-  .pipe(gulp.dest(path.dist));
-});
+  .pipe(gulp.dest(path.dist))
+})
 
 
