@@ -125,9 +125,9 @@ gulp.task('dev', () => {
 
 
 /*
- * path
+ * directory
  */
-const path = {
+const directory = {
   src: 'src/',
   dist: 'dist/',
   tmp: 'tmp/',
@@ -137,7 +137,7 @@ const path = {
   js_src: 'src/js/',
   img_src: 'src/img/',
   sprite_src: 'src/sprite/'
-}
+};
 
 
 /*
@@ -146,7 +146,7 @@ const path = {
 const pathStat = {
   local: './',
   test_x: 'http://hoge/'
-}
+};
 
 
 /*
@@ -154,14 +154,14 @@ const pathStat = {
  */
 const js_part = {
   lib: [
-    path.js_src + 'lib/jquery-3.0.0.min.js',
-    path.js_src + 'lib/lodash.min.js'
+    directory.js_src + 'lib/jquery-3.0.0.min.js',
+    directory.js_src + 'lib/lodash.min.js'
   ],
   common: [
-    path.js_src + 'common/utility.js',
-    path.js_src + 'common/sample_a.js'
+    directory.js_src + 'common/utility.js',
+    directory.js_src + 'common/sample_a.js'
   ]
-}
+};
 
 
 /*
@@ -174,7 +174,7 @@ gulp.task('serve', () => {
       port: 8052
     },
     server: {
-      baseDir: path.dist
+      baseDir: directory.dist
     }
   }
   browserSync(syncOption)
@@ -187,10 +187,10 @@ gulp.task('serve', () => {
 gulp.task('watch', () => {
   console.log('---------- watch ----------')
   return (function(){
-    gulp.watch(path.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload)
-    gulp.watch(path.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload)
-    gulp.watch(path.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload)
-    gulp.watch(path.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload)
+    gulp.watch(directory.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload)
+    gulp.watch(directory.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload)
+    gulp.watch(directory.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload)
+    gulp.watch(directory.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload)
     gulp.watch('gulpfile.js', ['build']).on('change', browserSync.reload)
   })()
 })
@@ -202,9 +202,9 @@ gulp.task('watch', () => {
 import clean from 'del'
 gulp.task('clean', () => {
   console.log('---------- clean ----------')
-  clean(path.tmp)
-  clean(path.dist)
-  clean(path.tmp_dev)
+  clean(directory.tmp)
+  clean(directory.dist)
+  clean(directory.tmp_dev)
 })
 
 
@@ -214,7 +214,7 @@ gulp.task('clean', () => {
 import spritesmith from 'gulp.spritesmith'
 gulp.task('sprite', () => {
   console.log('---------- sprite ----------')
-  const spriteData = gulp.src(path.sprite_src + 'sprite-icon/*.png')
+  const spriteData = gulp.src(directory.sprite_src + 'sprite-icon/*.png')
   .pipe(spritesmith({
     imgName: 'sprite-icon.png',
     cssName: 'sprite-icon.css',
@@ -227,8 +227,8 @@ gulp.task('sprite', () => {
     }
   }
   }))
-  spriteData.img.pipe(gulp.dest(path.img_src))
-  spriteData.css.pipe(gulp.dest(path.css_src + 'common/module/'))
+  spriteData.img.pipe(gulp.dest(directory.img_src))
+  spriteData.css.pipe(gulp.dest(directory.css_src + 'common/module/'))
     .pipe(size({title:'size : sprite'}))
 })
 
@@ -239,12 +239,12 @@ gulp.task('sprite', () => {
 import imagemin from 'gulp-imagemin'
 gulp.task('imageMin', () => {
   console.log('---------- imageMin ----------')
-  return gulp.src(path.img_src + '**/*')
+  return gulp.src(directory.img_src + '**/*')
     .pipe(imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(path.img_src))
+    .pipe(gulp.dest(directory.img_src))
 })
 
 
@@ -255,31 +255,31 @@ gulp.task('imageMin', () => {
 import precss from 'precss'
 gulp.task('precss', () => {
   console.log('---------- css ----------')
-  return gulp.src(path.css_src + '**/*.css')
+  return gulp.src(directory.css_src + '**/*.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(postcss([
         precss()
     ]))
-    .pipe(gulp.dest(path.tmp + 'css/'))
+    .pipe(gulp.dest(directory.tmp + 'css/'))
 })
 
 // rename
 gulp.task('renamecss', () => {
-  return gulp.src(path.tmp + 'css/common/import.css')
+  return gulp.src(directory.tmp + 'css/common/import.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(rename('common-' + version.css.common + '.css'))
-    .pipe(gulp.dest(path.tmp + 'css/'))
+    .pipe(gulp.dest(directory.tmp + 'css/'))
 })
 
 // postcss
 import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
 gulp.task('postcss', () => {
-  return gulp.src(path.tmp + 'css/*.css')
+  return gulp.src(directory.tmp + 'css/*.css')
     .pipe(plumber({
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
@@ -294,7 +294,7 @@ gulp.task('postcss', () => {
         }
       })
     ]))
-    .pipe(gulp.dest(path.dist + 'css/'))
+    .pipe(gulp.dest(directory.dist + 'css/'))
     .pipe(size({title:'size : css'}))
 })
 
@@ -304,11 +304,11 @@ gulp.task('postcss', () => {
  */
 import kss from 'gulp-kss'
 gulp.task('styleguide', () => {
-  return gulp.src(path.tmp + 'css/common.css')
+  return gulp.src(directory.tmp + 'css/common.css')
     .pipe(kss({
-      overview: path.styleguide_src + 'styleguide.md'
+      overview: directory.styleguide_src + 'styleguide.md'
     }))
-    .pipe(gulp.dest(path.dist + 'styleguide/'))
+    .pipe(gulp.dest(directory.dist + 'styleguide/'))
 })
 
 
@@ -329,7 +329,7 @@ gulp.task('babel', () => {
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(concat('common-' + version.js.common + '.js'))
-    .pipe(gulp.dest(path.tmp + 'js/'))
+    .pipe(gulp.dest(directory.tmp + 'js/'))
     .pipe(concat.header([
       '(function(window, $){',
       "  'use strict'",
@@ -347,7 +347,7 @@ gulp.task('babel', () => {
       comments: false
     }))
     .pipe(uglify())
-    .pipe(gulp.dest(path.dist + 'js/'))
+    .pipe(gulp.dest(directory.dist + 'js/'))
     .pipe(size({title:'size : js common'}))
 })
 
@@ -359,7 +359,7 @@ gulp.task('concat:lib', () => {
       errorHandler: notify.onError('Error: <%= error.message %>')
     }))
     .pipe(concat('lib-' + version.js.lib + '.js'))
-    .pipe(gulp.dest(path.dist + 'js/'))
+    .pipe(gulp.dest(directory.dist + 'js/'))
     .pipe(size({title:'size : js lib'}))
 })
 
@@ -370,7 +370,7 @@ gulp.task('concat:lib', () => {
 // eslint
 import eslint from 'gulp-eslint'
 gulp.task('eslint', () => {
-  return gulp.src(path.tmp + 'js/common-' + version.js.common + '.js')
+  return gulp.src(directory.tmp + 'js/common-' + version.js.common + '.js')
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
@@ -387,8 +387,8 @@ gulp.task('ejs', () => {
   console.log('---------- html ----------')
   gulp.src(
       [
-        path.html_src + 'html/**/*.ejs',
-        '!' + path.html_src + 'html/include/**/*.ejs'
+        directory.html_src + 'html/**/*.ejs',
+        '!' + directory.html_src + 'html/include/**/*.ejs'
       ]
     )
     .pipe(plumber({
@@ -397,9 +397,9 @@ gulp.task('ejs', () => {
     .pipe(ejs(
       {
         data:{
-          default: require('./' + path.html_src + 'data/common/default.json'),
-          nav: require('./' + path.html_src + 'data/common/nav.json'),
-          sample: require('./' + path.html_src + 'data/module/sample.json'),
+          default: require('./' + directory.html_src + 'data/common/default.json'),
+          nav: require('./' + directory.html_src + 'data/common/nav.json'),
+          sample: require('./' + directory.html_src + 'data/module/sample.json'),
           version: require('./version.json')
         },
         timestump: timestump,
@@ -407,7 +407,7 @@ gulp.task('ejs', () => {
       },
       {ext: '.html'}
     ))
-    .pipe(gulp.dest(path.dist + '/'))
+    .pipe(gulp.dest(directory.dist + '/'))
     .pipe(size({title:'size : html'}))
 })
 
@@ -419,14 +419,14 @@ gulp.task('copy', () => {
   console.log('---------- copy ----------')
   return gulp.src(
     [
-      path.img_src + '**/*'
+      directory.img_src + '**/*'
     ],
-    {base: path.src}
+    {base: directory.src}
   )
   .pipe(plumber({
     errorHandler: notify.onError('Error: <%= error.message %>')
   }))
-  .pipe(gulp.dest(path.dist))
+  .pipe(gulp.dest(directory.dist))
 })
 
 
