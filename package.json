@@ -1,7 +1,7 @@
 {
   "name": "gnavi-gulp-boiler-ejs-babel-postcss",
   "description": "gulp boilerplate for gnavi front-end development",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "",
   "main": "index",
   "scripts": {
