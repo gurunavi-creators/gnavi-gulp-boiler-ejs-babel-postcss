@@ -402,10 +402,10 @@ gulp.task('ejs', () => {
     .pipe(ejs(
       {
         data: {
-          default: fs.readFileSync(`./${directory.html_src}data/common/default.json`, 'utf8'),
-          nav: fs.readFileSync(`./${directory.html_src}data/common/nav.json`, 'utf8'),
-          sample: fs.readFileSync(`./${directory.html_src}data/module/sample.json`, 'utf8'),
-          version: fs.readFileSync('./version.json'),
+          default: JSON.parse(fs.readFileSync(`./${directory.html_src}data/common/default.json`, 'utf8')),
+          nav: JSON.parse(fs.readFileSync(`./${directory.html_src}data/common/nav.json`, 'utf8')),
+          sample: JSON.parse(fs.readFileSync(`./${directory.html_src}data/module/sample.json`, 'utf8')),
+          version,
         },
         timestump,
         pathStat: pathStat.local,
