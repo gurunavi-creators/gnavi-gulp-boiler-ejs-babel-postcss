@@ -2,6 +2,8 @@
  * common.js - sample_a.js
  * Author: sekiya
  * ---------------------------------------------------------------------- */
+/* global Utility */
+
 // sample A module
 const sampleA = {
   init: () => {

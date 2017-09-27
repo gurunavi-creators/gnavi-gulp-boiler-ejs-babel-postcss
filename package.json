@@ -22,7 +22,7 @@
     "browser-sync": "^2.18.6",
     "cssnano": "^3.5.2",
     "del": "^2.2.2",
-    "eslint-config-gnavi": "^1.0.0-beta1",
+    "eslint-config-gnavi": "^1.0.0",
     "gulp-babel": "^6.1.2",
     "gulp-babel-minify": "^0.1.12",
     "gulp-concat-util": "^0.5.5",
@@ -53,6 +53,8 @@
   "keywords": [],
   "bugs": {},
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   }
 }

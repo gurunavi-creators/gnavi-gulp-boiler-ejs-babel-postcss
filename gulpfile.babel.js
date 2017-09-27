@@ -37,6 +37,7 @@
 /*
  * init package
  */
+import fs from 'fs'
 import gulp from 'gulp'
 import runSequence from 'run-sequence'
 import plumber from 'gulp-plumber'
@@ -45,9 +46,23 @@ import browserSync from 'browser-sync'
 import rename from 'gulp-rename'
 import size from 'gulp-size'
 import postcss from 'gulp-postcss'
-import moment from 'momentjs'
+import clean from 'del'
+import spritesmith from 'gulp.spritesmith'
+import imagemin from 'gulp-imagemin'
+import precss from 'precss'
+import autoprefixer from 'autoprefixer'
+import cssnano from 'cssnano'
+import kss from 'gulp-kss'
+import babel from 'gulp-babel'
+import concat from 'gulp-concat-util'
+// import minify from 'gulp-babel-minify'
+import uglify from 'gulp-uglify'
+import eslint from 'gulp-eslint'
+import ejs from 'gulp-ejs'
+// import minifyejs from 'gulp-minify-ejs'
+// import moment from 'momentjs'
 
-//const timestump = moment().format('YYYYMMDDhhmmss')
+// const timestump = moment().format('YYYYMMDDhhmmss')
 const timestump = '20161012113446'
 const version = require('./version.json')
 
@@ -91,11 +106,9 @@ gulp.task('test', () => {
 })
 
 // build
-gulp.task('build', () => {
-  return runSequence(
-    'build:css', 'build:js', 'build:html', 'build:copy'
-  )
-})
+gulp.task('build', () => runSequence(
+  'build:css', 'build:js', 'build:html', 'build:copy',
+))
 
 // default
 gulp.task('default', () => {
@@ -107,11 +120,9 @@ gulp.task('default', () => {
  * option task
  */
 // start
-gulp.task('start', () => {
-  return runSequence(
-    'build', 'watch', 'serve'
-  )
-})
+gulp.task('start', () => runSequence(
+  'build', 'watch', 'serve',
+))
 
 // local
 gulp.task('local', () => {
@@ -136,8 +147,8 @@ const directory = {
   styleguide_src: 'src/styleguide/',
   js_src: 'src/js/',
   img_src: 'src/img/',
-  sprite_src: 'src/sprite/'
-};
+  sprite_src: 'src/sprite/',
+}
 
 
 /*
@@ -145,106 +156,104 @@ const directory = {
  */
 const pathStat = {
   local: './',
-  test_x: 'http://hoge/'
-};
+  test_x: 'http://hoge/',
+}
 
 
 /*
  * js parts
  */
-const js_part = {
+const jsPart = {
   lib: [
     directory.js_src + 'lib/jquery-3.0.0.min.js',
-    directory.js_src + 'lib/lodash.min.js'
+    directory.js_src + 'lib/lodash.min.js',
   ],
   common: [
     directory.js_src + 'common/utility.js',
-    directory.js_src + 'common/sample_a.js'
-  ]
-};
+    directory.js_src + 'common/sample_a.js',
+  ],
+}
 
 
 /*
  * BrowserSync
  */
-gulp.task('serve', () => {
+gulp.task('serve', (callback) => {
   const syncOption = {
     port: 8051,
     ui: {
-      port: 8052
+      port: 8052,
     },
     server: {
-      baseDir: directory.dist
-    }
+      baseDir: directory.dist,
+    },
   }
   browserSync(syncOption)
+  callback()
 })
 
 
 /*
  * watch
  */
-gulp.task('watch', () => {
+gulp.task('watch', (callback) => {
   console.log('---------- watch ----------')
-  return (function(){
-    gulp.watch(directory.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload)
-    gulp.watch(directory.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload)
-    gulp.watch(directory.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload)
-    gulp.watch(directory.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload)
-    gulp.watch('gulpfile.js', ['build']).on('change', browserSync.reload)
-  })()
+  gulp.watch(directory.css_src + '**/*.css', ['build:css']).on('change', browserSync.reload)
+  gulp.watch(directory.js_src + '**/*.js', ['build:js']).on('change', browserSync.reload)
+  gulp.watch(directory.html_src + '**/*.{ejs,json}', ['build:html']).on('change', browserSync.reload)
+  gulp.watch(directory.img_src + '**/*.{png,jpg}', ['build:copy']).on('change', browserSync.reload)
+  gulp.watch('gulpfile.js', ['build']).on('change', browserSync.reload)
+  callback()
 })
 
 
 /*
  * clean
  */
-import clean from 'del'
-gulp.task('clean', () => {
+gulp.task('clean', (callback) => {
   console.log('---------- clean ----------')
   clean(directory.tmp)
   clean(directory.dist)
   clean(directory.tmp_dev)
+  callback()
 })
 
 
 /*
  * sprite
  */
-import spritesmith from 'gulp.spritesmith'
 gulp.task('sprite', () => {
   console.log('---------- sprite ----------')
   const spriteData = gulp.src(directory.sprite_src + 'sprite-icon/*.png')
-  .pipe(spritesmith({
-    imgName: 'sprite-icon.png',
-    cssName: 'sprite-icon.css',
-    imgPath: '../img/sprite-icon.png',
-    cssFormat: 'css',
-    padding: 5,
-    cssOpts: {
-    cssSelector: function (sprite) {
-      return '.icon--' + sprite.name
-    }
-  }
-  }))
+    .pipe(spritesmith({
+      imgName: 'sprite-icon.png',
+      cssName: 'sprite-icon.css',
+      imgPath: '../img/sprite-icon.png',
+      cssFormat: 'css',
+      padding: 5,
+      cssOpts: {
+        cssSelector: sprite => '.icon--' + sprite.name,
+      },
+    }))
   spriteData.img.pipe(gulp.dest(directory.img_src))
   spriteData.css.pipe(gulp.dest(directory.css_src + 'common/module/'))
-    .pipe(size({title:'size : sprite'}))
+    .pipe(size({ title: 'size : sprite' }))
+  return spriteData
 })
 
 
 /*
  * imageMin
  */
-import imagemin from 'gulp-imagemin'
 gulp.task('imageMin', () => {
   console.log('---------- imageMin ----------')
-  return gulp.src(directory.img_src + '**/*')
+  const gulpTask = gulp.src(directory.img_src + '**/*')
     .pipe(imagemin({
       progressive: true,
-      interlaced: true
+      interlaced: true,
     }))
     .pipe(gulp.dest(directory.img_src))
+  return gulpTask
 })
 
 
@@ -252,63 +261,63 @@ gulp.task('imageMin', () => {
  * postcss
  */
 // precss(scss like)
-import precss from 'precss'
 gulp.task('precss', () => {
   console.log('---------- css ----------')
-  return gulp.src(directory.css_src + '**/*.css')
+  const gulpTask = gulp.src(directory.css_src + '**/*.css')
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(postcss([
-        precss()
+      precss(),
     ]))
     .pipe(gulp.dest(directory.tmp + 'css/'))
+  return gulpTask
 })
 
 // rename
 gulp.task('renamecss', () => {
-  return gulp.src(directory.tmp + 'css/common/import.css')
+  const gulpTask = gulp.src(directory.tmp + 'css/common/import.css')
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(rename('common-' + version.css.common + '.css'))
     .pipe(gulp.dest(directory.tmp + 'css/'))
+  return gulpTask
 })
 
 // postcss
-import autoprefixer from 'autoprefixer'
-import cssnano from 'cssnano'
 gulp.task('postcss', () => {
-  return gulp.src(directory.tmp + 'css/*.css')
+  const gulpTask = gulp.src(directory.tmp + 'css/*.css')
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(postcss([
-      autoprefixer ({
+      autoprefixer({
         browsers: ['last 2 version', 'ie >= 9'],
-        cascade: false
-       }),
+        cascade: false,
+      }),
       cssnano({
         minifyFontValues: {
-          removeQuotes: false
-        }
-      })
+          removeQuotes: false,
+        },
+      }),
     ]))
     .pipe(gulp.dest(directory.dist + 'css/'))
-    .pipe(size({title:'size : css'}))
+    .pipe(size({ title: 'size : css' }))
+  return gulpTask
 })
 
 
 /*
  * kss styleguide
  */
-import kss from 'gulp-kss'
 gulp.task('styleguide', () => {
-  return gulp.src(directory.tmp + 'css/common.css')
+  const gulpTask = gulp.src(directory.tmp + 'css/common.css')
     .pipe(kss({
-      overview: directory.styleguide_src + 'styleguide.md'
+      overview: directory.styleguide_src + 'styleguide.md',
     }))
     .pipe(gulp.dest(directory.dist + 'styleguide/'))
+  return gulpTask
 })
 
 
@@ -316,51 +325,49 @@ gulp.task('styleguide', () => {
  * js
  */
 // es2015
-import babel from 'gulp-babel'
-import concat from 'gulp-concat-util'
-import minify from 'gulp-babel-minify'
-import uglify from 'gulp-uglify'
 
 // babel
 gulp.task('babel', () => {
   console.log('---------- js ----------')
-  return gulp.src(js_part.common)
+  const gulpTask = gulp.src(jsPart.common)
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(concat('common-' + version.js.common + '.js'))
     .pipe(gulp.dest(directory.tmp + 'js/'))
     .pipe(concat.header([
       '(function(window, $){',
       "  'use strict'",
-      ''
+      '',
     ].join('\n')))
     .pipe(concat.footer([
       '',
-      '})(window, window.jQuery)'
+      '})(window, window.jQuery)',
     ].join('\n')))
     .pipe(babel({
       filename: 'common-' + version.js.common + '.js',
-      presets: [["es2015", {"loose": true}]],
+      presets: [['es2015', { loose: true }]],
       compact: true,
       minified: true,
-      comments: false
+      comments: false,
     }))
     .pipe(uglify())
     .pipe(gulp.dest(directory.dist + 'js/'))
-    .pipe(size({title:'size : js common'}))
+    .pipe(size({ title: 'size : js common' }))
+  return gulpTask
 })
 
 // concat
 // lib
 gulp.task('concat:lib', () => {
-  return gulp.src(js_part.lib)
+  const gulpTask = gulp.src(jsPart.lib)
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(concat('lib-' + version.js.lib + '.js'))
     .pipe(gulp.dest(directory.dist + 'js/'))
-    .pipe(size({title:'size : js lib'}))
+    .pipe(size({ title: 'size : js lib' }))
+  return gulpTask
 })
 
 
@@ -368,12 +375,12 @@ gulp.task('concat:lib', () => {
  * js test
  */
 // eslint
-import eslint from 'gulp-eslint'
 gulp.task('eslint', () => {
-  return gulp.src(directory.tmp + 'js/common-' + version.js.common + '.js')
+  const gulpTask = gulp.src(directory.tmp + 'js/common-' + version.js.common + '.js')
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
+  return gulpTask
 })
 
 
@@ -381,34 +388,33 @@ gulp.task('eslint', () => {
  * html
  */
 // ejs
-import ejs from 'gulp-ejs'
-import minifyejs from 'gulp-minify-ejs'
 gulp.task('ejs', () => {
   console.log('---------- html ----------')
-  gulp.src(
-      [
-        directory.html_src + 'html/**/*.ejs',
-        '!' + directory.html_src + 'html/include/**/*.ejs'
-      ]
-    )
+  const gulpTask = gulp.src(
+    [
+      directory.html_src + 'html/**/*.ejs',
+      '!' + directory.html_src + 'html/include/**/*.ejs',
+    ],
+  )
     .pipe(plumber({
-      errorHandler: notify.onError('Error: <%= error.message %>')
+      errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(ejs(
       {
-        data:{
-          default: require('./' + directory.html_src + 'data/common/default.json'),
-          nav: require('./' + directory.html_src + 'data/common/nav.json'),
-          sample: require('./' + directory.html_src + 'data/module/sample.json'),
-          version: require('./version.json')
+        data: {
+          default: fs.readFileSync(`./${directory.html_src}data/common/default.json`, 'utf8'),
+          nav: fs.readFileSync(`./${directory.html_src}data/common/nav.json`, 'utf8'),
+          sample: fs.readFileSync(`./${directory.html_src}data/module/sample.json`, 'utf8'),
+          version: fs.readFileSync('./version.json'),
         },
-        timestump: timestump,
-        pathStat: pathStat.local
+        timestump,
+        pathStat: pathStat.local,
       },
-      {ext: '.html'}
+      { ext: '.html' },
     ))
     .pipe(gulp.dest(directory.dist + '/'))
-    .pipe(size({title:'size : html'}))
+    .pipe(size({ title: 'size : html' }))
+  return gulpTask
 })
 
 
@@ -417,16 +423,15 @@ gulp.task('ejs', () => {
  */
 gulp.task('copy', () => {
   console.log('---------- copy ----------')
-  return gulp.src(
+  const gulpTask = gulp.src(
     [
-      directory.img_src + '**/*'
+      directory.img_src + '**/*',
     ],
-    {base: directory.src}
+    { base: directory.src },
   )
-  .pipe(plumber({
-    errorHandler: notify.onError('Error: <%= error.message %>')
-  }))
-  .pipe(gulp.dest(directory.dist))
+    .pipe(plumber({
+      errorHandler: notify.onError('Error: <%= error.message %>'),
+    }))
+    .pipe(gulp.dest(directory.dist))
+  return gulpTask
 })
-
-
