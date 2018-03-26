@@ -4,7 +4,6 @@
  * ** 開発開始手順
  *
  * $ npm i
- * $ gulp sprite
  * $ gulp iamgemin
  *
  *
@@ -15,10 +14,6 @@
  * ** buildコマンド
  *
  * $ gulp
- *
- * ** spriteコマンド
- *
- * $ gulp sprite
  *
  * ** iamgeminコマンド
  *
@@ -133,10 +128,8 @@ const directory = {
   tmp: 'tmp/',
   html_src: 'src/ejs/',
   css_src: 'src/css/',
-  styleguide_src: 'src/styleguide/',
   js_src: 'src/js/',
-  img_src: 'src/img/',
-  sprite_src: 'src/sprite/'
+  img_src: 'src/img/'
 };
 
 
@@ -209,31 +202,6 @@ gulp.task('clean', () => {
 
 
 /*
- * sprite
- */
-import spritesmith from 'gulp.spritesmith'
-gulp.task('sprite', () => {
-  console.log('---------- sprite ----------')
-  const spriteData = gulp.src(directory.sprite_src + 'sprite-icon/*.png')
-  .pipe(spritesmith({
-    imgName: 'sprite-icon.png',
-    cssName: 'sprite-icon.css',
-    imgPath: '../img/sprite-icon.png',
-    cssFormat: 'css',
-    padding: 5,
-    cssOpts: {
-    cssSelector: function (sprite) {
-      return '.icon--' + sprite.name
-    }
-  }
-  }))
-  spriteData.img.pipe(gulp.dest(directory.img_src))
-  spriteData.css.pipe(gulp.dest(directory.css_src + 'common/module/'))
-    .pipe(size({title:'size : sprite'}))
-})
-
-
-/*
  * imageMin
  */
 import imagemin from 'gulp-imagemin'
@@ -296,19 +264,6 @@ gulp.task('postcss', () => {
     ]))
     .pipe(gulp.dest(directory.dist + 'css/'))
     .pipe(size({title:'size : css'}))
-})
-
-
-/*
- * kss styleguide
- */
-import kss from 'gulp-kss'
-gulp.task('styleguide', () => {
-  return gulp.src(directory.tmp + 'css/common.css')
-    .pipe(kss({
-      overview: directory.styleguide_src + 'styleguide.md'
-    }))
-    .pipe(gulp.dest(directory.dist + 'styleguide/'))
 })
 
 
