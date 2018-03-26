@@ -21,6 +21,7 @@
     "cssnano": "^3.5.2",
     "del": "^2.2.2",
     "eslint-config-gnavi": "^1.1.0",
+    "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-babel-minify": "^0.1.12",
     "gulp-concat-util": "^0.5.5",
