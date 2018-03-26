@@ -5,11 +5,6 @@
 
 # プレビュー
 
-## MUプレビュー
-
-[sample](sample) 
-
-
 # ファイルデプロイ先
 
 ## テスト
@@ -33,31 +28,31 @@
 
 ## プレビュー
 
-[sample](sample) 
+[sample](sample)
 
 ## test-x.gnst デプロイ
 
-[sample](sample) 
+[sample](sample)
 
 ## sample 本番 デプロイ
 
 以下の2ステップによりリリースしてください
 
-1.[sample](sample) 
+1.[sample](sample)
 
-2.[sample](sample) 
+2.[sample](sample)
 
 
 # version
 
-- [version.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/version.json) 
+- [version.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/version.json)
 
 
 # package
 
 ## package installed
 
-- [package.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/package.json) 
+- [package.jsonを参照](https://github.com/gurunavi-creators/gnavi-gulp-boiler-ejs-babel-postcss/blob/master/package.json)
 
 
 # config
@@ -143,9 +138,9 @@
 
 ## 設計方針
 
-- [SMACSS](https://smacss.com/) 
+- [SMACSS](https://smacss.com/)
 
 ## セレクター命名方針
 
-- [MindBEMding](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) 
+- [MindBEMding](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
 
