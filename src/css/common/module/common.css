@@ -1,17 +1,16 @@
 @charset "utf-8";
 
- /*navi--head
-animation variable
-property */
+/* navi--head animation variable property */
 $ANIM_NVICON_PROP: transform;
 $ANIM_BD_PROP: opacity;
-/* duration */
-$ANIM_NVICON_DUR: .2s;
-$ANIM_BD_DUR: .4s;
-/* timing-function */
-$ANIM_NVICON_TIME: cubic-bezier(.3,.7,.5,1);
-$ANIM_BD_TIME: ease-in;
 
+/* duration */
+$ANIM_NVICON_DUR: 0.2s;
+$ANIM_BD_DUR: 0.4s;
+
+/* timing-function */
+$ANIM_NVICON_TIME: cubic-bezier(0.3, 0.7, 0.5, 1);
+$ANIM_BD_TIME: ease-in;
 
 /* footer */
 .footer {

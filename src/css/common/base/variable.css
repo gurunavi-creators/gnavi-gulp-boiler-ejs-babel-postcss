@@ -26,20 +26,27 @@ $LINE_HEIGHT_M: 1.6;
 $LINE_HEIGHT_NONE: 1;
 
 /* background-color */
+
 /* 背景色：標準 */
 $CLR_BG: #fff;
+
 /* 背景色：反転 */
 $CLR_BG_REVERSE: #362020;
+
 /* 背景色：強調 */
 $CLR_BG_EM: #e2c147;
 
 /* color */
+
 /* 文字色：標準 */
 $CLR_TXT: #362020;
+
 /* 文字色：リンク */
 $CLR_TXT_LINK: #01588c;
 $CLR_TXT_HOVER: #01588c;
+
 /* 文字色：反転 */
 $CLR_TXT_REVERSE: #fff;
+
 /* 文字色：注記 */
 $CLR_TXT_NOTE: #666;

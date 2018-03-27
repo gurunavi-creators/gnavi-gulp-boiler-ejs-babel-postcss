@@ -1,13 +1,16 @@
 @charset "utf-8";
+
 /* l-body */
 .l-body {
   background: url(../img/bg.png) repeat-x center 0;
 }
+
 /* l-wrapper */
 .l-wrapper {
   margin: 0 auto;
   width: $WIDTH_WRAPPER;
 }
+
 /* l-h */
 .l-h {
   display: block;

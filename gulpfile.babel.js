@@ -43,6 +43,7 @@ import size from 'gulp-size'
 import postcss from 'gulp-postcss'
 import clean from 'del'
 import imagemin from 'gulp-imagemin'
+import stylelint from 'stylelint'
 import precss from 'precss'
 import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
@@ -233,6 +234,22 @@ gulp.task('precss', () => {
       errorHandler: notify.onError('Error: <%= error.message %>'),
     }))
     .pipe(postcss([
+      stylelint({
+        "extends": "stylelint-config-standard",
+        "rules": {
+          "at-rule-no-unknown": [true, {
+            "ignoreAtRules": ["if", "else", "mixin", "content", "include", "for"]
+          }],
+          "property-no-unknown": [true, {
+            "checkPrefixed": true
+          }],
+          "no-duplicate-selectors": null,
+          "selector-list-comma-newline-after": null,
+          "rule-empty-line-before": ["always", {"ignore": ["after-comment", "inside-block"]}],
+          "length-zero-no-unit": null,
+          "declaration-empty-line-before": null
+        }
+      }),
       precss(),
     ]))
     .pipe(gulp.dest(directory.tmp + 'css/'))
